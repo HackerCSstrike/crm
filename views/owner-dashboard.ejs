@@ -1,0 +1,21 @@
+<% layout('layouts/layout') -%>
+
+<div class="card">
+    <h1>Панель владельца</h1>
+    <p>Добро пожаловать, **<%= user.username %>**!</p>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Всего пользователей</h3>
+            <h2><%= totalUsers %></h2>
+        </div>
+        <div class="card">
+            <h3>Всего записей</h3>
+            <h2><%= totalBookings %></h2>
+        </div>
+        <div class="card">
+            <h3>Доход от подписок (в месяц)</h3>
+            <h2><%= monthlyRevenue %> ₽</h2>
+        </div>
+    </div>
+</div>

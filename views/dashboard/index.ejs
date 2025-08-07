@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Личный кабинет | PipeKit</title>
+<link href="/css/style.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans text-gray-800 antialiased">
+<div class="flex h-screen overflow-hidden">
+<aside class="w-64 bg-gray-800 text-white shadow-md">
+<div class="p-6">
+<h2 class="text-xl font-semibold text-gray-100">PipeKit</h2>
+</div>
+<nav class="mt-4">
+<a href="/dashboard" class="flex items-center py-2 px-6 bg-gray-700 hover:bg-gray-600 text-gray-100">
+<svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s2.332.477 3.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253"></path></svg>
+Настройки лендинга
+</a>
+<a href="/dashboard/appointments" class="flex items-center py-2 px-6 hover:bg-gray-700 text-gray-300">
+<svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-4 4V3M3 15h18M3 11h18M3 21h18"></path></svg>
+Мои записи
+</a>
+<a href="/logout" class="flex items-center py-2 px-6 hover:bg-gray-700 text-gray-300 mt-auto">
+<svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+Выйти
+</a>
+</nav>
+</aside>
+
+    <div class="flex-1 overflow-y-auto bg-gray-100 p-6">
+        <h1 class="text-2xl font-semibold text-gray-900 mb-4">Добро пожаловать, <%= user.fullname %>!</h1>
+        <div class="bg-white shadow-md rounded-xl p-6 mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">Настройки лендинга</h3>
+            <form action="/dashboard/settings" method="POST" class="space-y-3">
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700">Заголовок лендинга</label>
+                    <input type="text" id="title" name="title" value="<%= typeof landing !== 'undefined' ? landing.title : '' %>" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div>
+                    <label for="contact_info" class="block text-sm font-medium text-gray-700">Контактные данные (Telegram / Телефон)</label>
+                    <input type="text" id="contact_info" name="contact_info" value="<%= typeof landing !== 'undefined' ? landing.contact_info : '' %>" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow-sm transition duration-200">Сохранить</button>
+            </form>
+        </div>
+
+        <div class="bg-white shadow-md rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">Ваша ссылка на лендинг</h3>
+            <p class="text-gray-600">
+                <a href="/u/<%= user.username %>" target="_blank" class="text-blue-500 hover:underline">
+                    http://localhost:3000/u/<%= user.username %>
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

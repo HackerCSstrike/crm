@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><%= landing.title %></title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body {
+background-image: url('/path/to/your/background-image.jpg'); /* Убери или измени путь */
+background-size: cover;
+background-repeat: no-repeat;
+color: white;
+}
+.modal {
+position: fixed;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+background: white;
+color: #333;
+padding: 2rem;
+border-radius: 0.5rem;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+z-index: 50;
+}
+.overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+z-index: 40;
+}
+.calendar-grid {
+display: grid;
+grid-template-columns: repeat(7, minmax(3rem, 1fr));
+gap: 0.5rem;
+margin-bottom: 1rem;
+}
+.calendar-day {
+padding: 0.5rem;
+border-radius: 0.25rem;
+text-align: center;
+cursor: pointer;
+}
+.available {
+background-color: #4CAF50;
+color: white;
+}
+.unavailable {
+background-color: #f44336;
+color: white;
+cursor: not-allowed;
+}
+.time-slots {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(4rem, 1fr));
+gap: 0.5rem;
+margin-bottom: 1rem;
+}
+.time-slot {
+padding: 0.5rem;
+border-radius: 0.25rem;
+text-align: center;
+cursor: pointer;
+}
+.time-available {
+background-color: #4CAF50;
+color: white;
+}
+.time-unavailable {
+background-color: #f44336;
+color: white;
+cursor: not-allowed;
+}
+</style>
+</head>
+<body class="bg-gradient-to-r from-blue-500 to-indigo-600 min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="bg-white text-black shadow-md rounded-xl p-8 md:p-12 max-w-lg w-full">
+<div class="text-center">
+<h2 class="text-2xl font-bold text-gray-900 mb-6"><%= landing.title %></h2>
+<p class="text-md text-gray-700 mb-8">Выберите день и время для записи.</p>
+</div>
+
+<div id="calendar" class="mb-6">
+    <h3 class="text-lg font-semibold text-gray-800 mb-3">Выберите день:</h3>
+    <div class="calendar-grid">
+        <% for (let i = 1; i <= 30; i++) { %>
+            <% const isAvailable = Math.random() > 0.3; %>
+            <div class="calendar-day <%= isAvailable ? 'available' : 'unavailable' %> <%= !isAvailable ? 'opacity-50' : '' %>"
+                 data-day="<%= i %>"
+                 data-available="<%= isAvailable %>"
+                 onclick="handleDayClick(this)">
+                <%= i %>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<div id="timeSlots" class="hidden mb-6">
+    <h3 class="text-lg font-semibold text-gray-800 mb-3">Выберите время:</h3>
+    <div class="time-slots">
+        <% for (let i = 9; i <= 18; i++) { %>
+            <% const isTimeAvailable = Math.random() > 0.5; %>
+            <div class="time-slot <%= isTimeAvailable ? 'time-available' : 'time-unavailable' %> <%= !isTimeAvailable ? 'opacity-50' : '' %>"
+                 data-time="<%= i %>:00"
+                 data-available="<%= isTimeAvailable %>"
+                 onclick="handleTimeClick(this)">
+                <%= i %>:00
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<form id="bookingForm" action="/u/<%= username %>/book" method="POST" class="space-y-4 hidden">
+    <div>
+        <label for="date" class="block text-sm font-medium text-gray-700">Дата</label>
+        <input type="text" id="date" name="date" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" readonly>
+    </div>
+    <div>
+        <label for="time" class="block text-sm font-medium text-gray-700">Время</label>
+        <input type="text" id="time" name="time" class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" readonly>
+    </div>
+    <div>
+        <label for="client_name" class="block text-sm font-medium text-gray-700">Ваше имя</label>
+        <input type="text" id="client_name" name="client_name" required class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+    </div>
+    <div>
+        <label for="client_contact" class="block text-sm font-medium text-gray-700">Телефон или Telegram</label>
+        <input type="text" id="client_contact" name="client_contact" required class="mt-1 block w-full px-4 py-2 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+    </div>
+    <div>
+        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 rounded-md shadow-sm transition duration-200">Записаться</button>
+    </div>
+</form>
+
+</div>
+
+<div id="successModal" class="modal hidden">
+<h2 class="text-xl font-bold text-gray-900 mb-4">Вы успешно записались!</h2>
+<p>Мы свяжемся с вами в ближайшее время для подтверждения.</p>
+<button onclick="closeModal()" class="mt-4 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded">Закрыть</button>
+</div>
+<div id="modalOverlay" class="overlay hidden"></div>
+
+<script>
+    let selectedDay = null;
+    
+    function handleDayClick(element) {
+        if (element.dataset.available === 'true') {
+            selectedDay = element.dataset.day;
+            document.getElementById('calendar').classList.add('hidden');
+            document.getElementById('timeSlots').classList.remove('hidden');
+        }
+    }
+    
+    function handleTimeClick(element) {
+        if (element.dataset.available === 'true') {
+            const selectedTime = element.dataset.time;
+            document.getElementById('timeSlots').classList.add('hidden');
+            document.getElementById('bookingForm').classList.remove('hidden');
+            document.getElementById('date').value = selectedDay;
+            document.getElementById('time').value = selectedTime;
+        }
+    }
+    
+    const form = document.getElementById('bookingForm');
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(new FormData(form)).toString(),
+        })
+        .then(response => {
+            if (response.ok) {
+                document.getElementById('successModal').classList.remove('hidden');
+                document.getElementById('modalOverlay').classList.remove('hidden');
+            } else {
+                console.error('Ошибка при записи');
+            }
+        })
+        .catch(error => {
+            console.error('Произошла ошибка:', error);
+        });
+    });
+    
+    function closeModal() {
+        document.getElementById('successModal').classList.add('hidden');
+        document.getElementById('modalOverlay').classList.add('hidden');
+        document.getElementById('bookingForm').classList.add('hidden');
+        document.getElementById('calendar').classList.remove('hidden');
+        document.getElementById('timeSlots').classList.add('hidden');
+        form.reset();
+        selectedDay = null;
+    }
+    </script>
+    
+
+</body>
+</html>

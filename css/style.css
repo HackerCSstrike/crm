@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+@font-face {
+    font-family: 'Bounded ExtraBold';
+    src: url('/fonts/Bounded-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+}
+
+:root {
+    --bg-primary: #f0f2f5;
+    --bg-card: #ffffff;
+    --border-color: #e0e0e0;
+    --text-color: #1a1a1a;
+    --accent-blue: #007aff;
+    --accent-green: #34c759;
+    --accent-red: #ff3b30;
+    --accent-yellow: #ffcc00;
+}
+
+body {
+    font-family: 'Bounded ExtraBold', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.card {
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 25px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.card:hover { transform: translateY(-5px); }
+
+h1, h2, h3 { font-family: 'Bounded ExtraBold', sans-serif; color: var(--text-color); }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+.status-badge.pending { background-color: var(--accent-yellow); }
+.status-badge.accepted { background-color: var(--accent-green); }
+.status-badge.declined { background-color: var(--accent-red); }
+
+button, .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Bounded ExtraBold', sans-serif;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+    text-decoration: none;
+}
+.btn-primary { background-color: var(--accent-blue); color: white; }
+.btn-primary:hover { background-color: #005bb5; transform: translateY(-2px); }
+
+.macos-button {
+    background: linear-gradient(180deg, #fafafa 0%, #e8e8e8 100%);
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+.macos-button:active { background: #e0e0e0; box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1); transform: translateY(1px); }
+
+.list-item {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+    text-decoration: none;
+    color: var(--text-color);
+}
+.list-item:hover { background-color: #f8f8f8; }
